@@ -3,7 +3,7 @@ class Profile < ApplicationRecord
   
     belongs_to :branch
     has_many :user_cards
-    belongs_to :user
+    belongs_to :user, foreign_key: 'users_id'
     # has_many :merchant_transactions, class_name: "AccountTransaction", foreign_key: "merchant_id"
 
   

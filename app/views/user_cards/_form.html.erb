@@ -1,0 +1,35 @@
+<%= form_with model: user_card, local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :credit_card_id, class: "form-label" %>
+      <%= f.text_field :credit_card_id, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :profile_id, class: "form-label" %>
+      <%= f.text_field :profile_id, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :issue_date, class: "form-label" %>
+      <%= f.date_field :issue_date, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :expiry_date, class: "form-label" %>
+      <%= f.date_field :expiry_date, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :available_limit, class: "form-label" %>
+      <%= f.number_field :available_limit, step: "0.01", class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :cvv, class: "form-label" %>
+      <%= f.password_field :cvv, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :is_active, class: "form-check-label" %>
+      <%= f.check_box :is_active, class: "form-check-input" %>
+    </div>
+  
+    <div class="text-end">
+      <%= f.submit (user_card.new_record? ? "Create Card" : "Update Card"), class: "btn btn-success" %>
+    </div>
+  <% end %>
+  

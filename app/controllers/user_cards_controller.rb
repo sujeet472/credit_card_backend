@@ -9,19 +9,25 @@ class UserCardsController < ApplicationController
 
     def show
         @user_card = UserCard.kept.find(params[:id])
-        render json:@user_card
+        # render json:@user_card
     end
 
     def new
         @user_card = UserCard.new
     end
 
+
+
+
+
     def create
         @user_card = UserCard.new(user_card_params)
-        if user_card.save
-            redirect_to @user_card
+        @user_card.cvv = params[:user_card][:cvv] # Manually assign cvv
+        
+        if @user_card.save
+            redirect_to user_card_path(@user_card), notice: "User card created successfully."
         else
-            render :new, status: :unprocessable_entity  #return 422 if there is error
+            render :new, status: :unprocessable_entity  # return 422 if there is an error
         end
     end
 
@@ -63,7 +69,7 @@ class UserCardsController < ApplicationController
     end
 
     def user_card_params
-        params.require(:user_card).permit(:id, :credit_card_id, :profile_id, :issue_date, :expiry_date, :is_active, :available_limit, :created_at, :updated_at, hashed_cvv)
-    end
+        params.require(:user_card).permit(:id, :credit_card_id, :profile_id, :issue_date, :expiry_date, :is_active, :available_limit, :created_at, :updated_at, :cvv)
+    end    
 
 end

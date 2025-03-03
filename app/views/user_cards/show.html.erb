@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <div class="card shadow-lg p-4">
+    <h3 class="text-center mb-4">User Card Details</h3>
+
+    <p><strong>Credit Card ID:</strong> <%= @user_card.credit_card_id %></p>
+    <p><strong>Profile ID:</strong> <%= @user_card.profile_id %></p>
+    <p><strong>Issue Date:</strong> <%= @user_card.issue_date %></p>
+    <p><strong>Expiry Date:</strong> <%= @user_card.expiry_date %></p>
+    <p><strong>Available Limit:</strong> <%= @user_card.available_limit %></p>
+    <p><strong>Is Active:</strong> <%= @user_card.is_active ? 'Yes' : 'No' %></p>
+
+    <div class="text-end mt-3">
+      <%= link_to "Edit Card", edit_user_card_path(@user_card), class: "btn btn-primary" %>
+      <%= link_to "Back", user_cards_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+</div>

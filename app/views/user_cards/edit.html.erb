@@ -1,0 +1,11 @@
+<div class="container mt-4">
+  <div class="card shadow-lg p-4">
+    <h3 class="text-center mb-4">Edit User Card</h3>
+
+    <%= render 'form', user_card: @user_card %>
+
+    <div class="text-end mt-3">
+      <%= link_to "Back", user_card_path(@user_card), class: "btn btn-secondary" %>
+    </div>
+  </div>
+</div>

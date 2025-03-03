@@ -69,3 +69,5 @@ gem "jsbundling-rails", "~> 1.3"
 gem 'letter_opener'
 
 gem 'jwt'
+
+gem 'rack-cors'
