@@ -82,5 +82,20 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :frontend_account_transactions, only: [:index]
+    end
+  end
+
+
+  Rails.application.routes.draw do
+    namespace :api do
+      namespace :v1 do
+        post 'auth/login', to: 'auth#create'
+      end
+    end
+  end
+
 
 end
