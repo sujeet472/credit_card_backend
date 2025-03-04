@@ -17,19 +17,29 @@ class UserCardsController < ApplicationController
     end
 
 
-
-
-
     def create
         @user_card = UserCard.new(user_card_params)
-        @user_card.cvv = params[:user_card][:cvv] # Manually assign cvv
-        
+        @user_card.cvv = params[:user_card][:cvv] # Manually assign cvv before saving
+      
         if @user_card.save
-            redirect_to user_card_path(@user_card), notice: "User card created successfully."
+          redirect_to user_card_path(@user_card), notice: "User card created successfully."
         else
-            render :new, status: :unprocessable_entity  # return 422 if there is an error
+          render :new, status: :unprocessable_entity  # return 422 if there is an error
         end
-    end
+      end
+
+      
+    # def create
+
+    #     @user_card = UserCard.new(user_card_params)
+    #     @user_card.cvv = params[:user_card][:cvv] # Manually assign cvv
+    #     byebug
+    #     if @user_card.save
+    #         redirect_to user_card_path(@user_card), notice: "User card created successfully."
+    #     else
+    #         render :new, status: :unprocessable_entity  # return 422 if there is an error
+    #     end
+    # end
 
     def edit
         @user_card = UserCard.kept.find(params[:id])

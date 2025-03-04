@@ -1,22 +1,23 @@
-class Api::V1::FrontendAccountTransactionsController < ApplicationController
-    # before_action :authenticate_user!
-  
-    def index
-      # Get the current user's profile
-      profile = Profile.find_by(users_id: current_user.id)
-  
-      if profile.nil?
-        render json: { error: "Profile not found" }, status: :not_found
-        return
-      end
-  
-      # Get all user cards linked to this profile
-      user_card_ids = UserCard.where(profile_id: profile.id).pluck(:id)
-  
-      # Fetch all transactions related to these user cards
-      transactions = AccountTransaction.where(user_card_id: user_card_ids)
-  
-      render json: transactions
-    end
-  end
-  
+class Api::V1::FrontendUserCardsController < Api::V1::BaseController
+
+   
+            # before_action :authenticate_user! # Ensures user is logged in
+      
+            def index
+              # Find the profile of the current logged-in user
+              profile = Profile.find_by(users_id: current_user.id)
+      
+              # If profile exists, fetch associated user_cards where discarded_at is nil
+              if profile
+                user_cards = UserCard.where(profile_id: profile.id, discarded_at: nil)
+                render json: { user_cards: user_cards }, status: :ok
+              else
+                render json: { error: "Profile not found for the current user" }, status: :not_found
+              end
+            end
+          
+   
+    
+      
+
+end

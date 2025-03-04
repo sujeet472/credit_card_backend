@@ -1,4 +1,4 @@
-class Api::V1::CustomersController < ApplicationController
+class Api::V1::CustomersController < Api::V1::BaseController
     # Skip CSRF protection if this is a pure API controller
     protect_from_forgery with: :null_session
   

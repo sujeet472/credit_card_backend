@@ -1,4 +1,4 @@
-class Api::V1::RewardsController < ApplicationController
+class Api::V1::RewardsController < Api::V1::BaseController
     before_action :set_reward, only: %i[show update destroy]
   
     def index

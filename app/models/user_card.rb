@@ -31,8 +31,9 @@ class UserCard < ApplicationRecord
     attr_accessor :cvv
 
     # Automatically generate user_card_id in the format UC00x
+    before_validation :hash_cvv
     before_create :generate_user_card_id
-    before_save :hash_cvv
+    # before_save :hash_cvv
   
     private
 
@@ -45,37 +46,15 @@ class UserCard < ApplicationRecord
     end
     
 
-
-
-    # def generate_user_card_id
-    #   # Get the next available reward number
-    #   last_id = UserCard.order(:id).last&.id
-    #   next_number = last_id ? last_id[1..-1].to_i + 1 : 1 # Start from 1 if there are no records
-  
-    #   # Format the reward_id as R00(x), where (x) is the next number
-    #   self.id = "UC#{next_number.to_s.rjust(3, '0')}"
-    # end
-
     def hash_cvv
+      puts "Hashing CVV..."
       if cvv.present?
         self.hashed_cvv = BCrypt::Password.create(cvv)
       end
     end
-  end
+    
 
 
-# **********************when you will create authentication for cvv***************
-
-# def authenticate_cvv(input_cvv)
-#   BCrypt::Password.new(self.hashed_cvv) == input_cvv
-# end
-
-
-# user_card = UserCard.find_by(user_card_id: "UC0001")
-# if user_card.authenticate_cvv(742)
-#   puts "CVV is correct"
-# else
-#   puts "Invalid CVV"
-# end
+end
 
   

@@ -1,6 +1,6 @@
-class Api::V1::AccountTransactionsController < ApplicationController
+class Api::V1::AccountTransactionsController < Api::V1::BaseController
         before_action :set_account_transaction, only: %i[show update destroy]
-      
+        # skip_before_action :authenticate_request
         def index
           render json: AccountTransaction.kept
         end

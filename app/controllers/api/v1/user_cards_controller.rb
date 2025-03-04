@@ -1,4 +1,4 @@
-class Api::V1::UserCardsController < ApplicationController
+class Api::V1::UserCardsController < Api::V1::BaseController
     before_action :authenticate_request
     before_action :set_user_card, only: %i[show update destroy]
   

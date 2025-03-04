@@ -71,3 +71,5 @@ gem 'letter_opener'
 gem 'jwt'
 
 gem 'rack-cors'
+
+gem 'byebug'
