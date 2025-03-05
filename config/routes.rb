@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "profiles/index"
+  get "profiles/edit"
+  get "profiles/update"
   get "credit_cards/index"
   get "home/index"
   devise_for :users
@@ -20,7 +23,7 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   # root to: "home#index"
-  resources :branches
+  # resources :branches
   root to: "branches#index" 
 
   resources :branches do
@@ -89,6 +92,19 @@ Rails.application.routes.draw do
       resources :frontend_user_cards, only: [:index]
     end
   end
+
+  namespace :api do
+    namespace :v1 do
+      resources :frontend_account_transactions, only: [:index, :create]
+    end
+  end
+
+    namespace :api do
+      namespace :v1 do
+        resource :frontend_profile, only: [:show, :update]
+      end
+    end
+  
 
 
 end
