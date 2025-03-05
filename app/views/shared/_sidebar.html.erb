@@ -1,0 +1,65 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2>Banking Admin</h2>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <ul>
+      <li class="<%= 'active' if current_page?(dashboard_path) %>">
+        <%= link_to dashboard_path do %>
+          <i class="sidebar-icon">📊</i>
+          <span>Dashboard</span>
+        <% end %>
+      </li>
+      
+      <li class="<%= 'active' if controller_name == 'profiles' %>">
+        <%= link_to profiles_index_path do %>
+          <i class="sidebar-icon">👤</i>
+          <span>Profiles</span>
+        <% end %>
+      </li>
+      
+      <li class="<%= 'active' if controller_name == 'credit_cards' %>">
+        <%= link_to credit_cards_path do %>
+          <i class="sidebar-icon">💳</i>
+          <span>Credit Cards</span>
+        <% end %>
+      </li>
+      
+      <li class="<%= 'active' if controller_name == 'account_transactions' %>">
+        <%= link_to account_transactions_path do %>
+          <i class="sidebar-icon">🔄</i>
+          <span>Transactions</span>
+        <% end %>
+      </li>
+      
+      <li class="<%= 'active' if controller_name == 'rewards' %>">
+        <%= link_to rewards_path do %>
+          <i class="sidebar-icon">🎁</i>
+          <span>Rewards</span>
+        <% end %>
+      </li>
+      
+      <li class="<%= 'active' if controller_name == 'branches' %>">
+        <%= link_to branches_path do %>
+          <i class="sidebar-icon">🏢</i>
+          <span>Branches</span>
+        <% end %>
+      </li>
+      
+      <li class="<%= 'active' if controller_name == 'user_cards' %>">
+        <%= link_to user_cards_path do %>
+          <i class="sidebar-icon">💳</i>
+          <span>User Cards</span>
+        <% end %>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="sidebar-footer">
+    <%= link_to destroy_user_session_path, method: :delete, class: "logout-link" do %>
+      <i class="sidebar-icon">🚪</i>
+      <span>Logout</span>
+    <% end %>
+  </div>
+</div>

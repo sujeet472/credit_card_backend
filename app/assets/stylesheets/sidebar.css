@@ -1,0 +1,109 @@
+/* Sidebar Styles */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #1e3a8a;
+    color: white;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .sidebar-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .sidebar-nav {
+    flex: 1;
+    padding: 20px 0;
+  }
+  
+  .sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-nav li {
+    margin-bottom: 5px;
+  }
+  
+  .sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .sidebar-nav li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .sidebar-nav li.active a {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 6px;
+    margin: 0 10px;
+  }
+  
+  .sidebar-icon {
+    margin-right: 12px;
+    font-size: 1.2rem;
+  }
+  
+  .sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .logout-link {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+  }
+  
+  .logout-link:hover {
+    color: white;
+  }
+  
+  /* Main content adjustment to account for sidebar */
+  .main-content {
+    margin-left: 240px;
+    padding: 20px;
+  }
+  
+  /* Responsive sidebar */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 70px;
+    }
+    
+    .sidebar-header h2, .sidebar-nav li a span, .sidebar-footer .logout-link span {
+      display: none;
+    }
+    
+    .sidebar-icon {
+      margin-right: 0;
+      font-size: 1.5rem;
+    }
+    
+    .sidebar-nav li.active a {
+      margin: 0 5px;
+    }
+    
+    .main-content {
+      margin-left: 70px;
+    }
+  }

@@ -1,26 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Credit Card Based Banking System" %></title>
+    <title>Credit Card Management System</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <%= stylesheet_link_tag 'dashboard', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= stylesheet_link_tag 'sidebar', media: 'all', 'data-turbo-track': 'reload' %>
+
+    
   </head>
 
   <body>
-       <p class="notice"><%= notice %></p>
-       <p class="alert"><%= alert %></p>
-    <%= yield %>
+    <% if user_signed_in? %>
+      <%= render 'shared/sidebar' %>
+      <div class="main-content">
+        <% if notice %><div class="alert alert-info"><%= notice %></div><% end %>
+        <% if alert %><div class="alert alert-warning"><%= alert %></div><% end %>
+        <%= yield %>
+      </div>
+    <% else %>
+      <div class="auth-container">
+        <% if notice %><div class="alert alert-info"><%= notice %></div><% end %>
+        <% if alert %><div class="alert alert-warning"><%= alert %></div><% end %>
+        <div class="auth-card">
+          <h2 class="auth-title">Credit Card Management System</h2>
+          <%= yield %>
+        </div>
+      </div>
+    <% end %>
   </body>
 </html>
+
+
+
+
+
+
+

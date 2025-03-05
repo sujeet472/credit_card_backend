@@ -6,3 +6,5 @@
 //= link controllers/application.js
 //= link controllers/hello_controller.js
 //= link controllers/index.js
+//= link dashboard.css
+//= link sidebar.css

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "dashboard/index"
   get "profiles/index"
   get "profiles/edit"
   get "profiles/update"
@@ -54,6 +55,7 @@ Rails.application.routes.draw do
   resources :credit_cards 
   
   Rails.application.routes.draw do
+  get "dashboard/index"
     namespace :api do
       namespace :v1 do
         resources :credit_cards do
@@ -67,6 +69,7 @@ Rails.application.routes.draw do
   end
 
   Rails.application.routes.draw do
+  get "dashboard/index"
     namespace :api do
       namespace :v1 do
         resources :customers, params: :customer_id
@@ -80,6 +83,7 @@ Rails.application.routes.draw do
   end
 
   Rails.application.routes.draw do
+  get "dashboard/index"
     namespace :api do
       namespace :v1 do
         post 'auth/login', to: 'auth#create'
@@ -105,6 +109,8 @@ Rails.application.routes.draw do
       end
     end
   
+
+    get 'dashboard', to: 'dashboard#index'
 
 
 end

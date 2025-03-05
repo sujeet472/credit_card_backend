@@ -1,0 +1,149 @@
+<!-- Main Dashboard Container -->
+<div class="dashboard-container">
+  <!-- Header Stats Cards -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <h3>Total Users</h3>
+      <div class="stat-value"><%= @total_profiles %></div>
+    </div>
+    
+    <div class="stat-card">
+      <h3>Active Cards</h3>
+      <div class="stat-value"><%= @active_cards %></div>
+    </div>
+    
+    <div class="stat-card">
+      <h3>Transactions (Total)</h3>
+      <div class="stat-value"><%= @total_transactions %></div>
+    </div>
+    
+    <div class="stat-card">
+      <h3>Total Branches</h3>
+      <div class="stat-value"><%= @total_branches %></div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <!-- Transaction Volume Chart -->
+    <div class="chart-card large">
+      <h3>Transaction Volume</h3>
+      <canvas id="transactionChart"></canvas>
+    </div>
+    
+    <!-- Card Type Distribution -->
+    <div class="chart-card small">
+      <h3>Card Types</h3>
+      <canvas id="cardDistributionChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Recent Transactions Table -->
+  <div class="table-card">
+    <div class="card-header">
+      <h3>Recent Transactions</h3>
+      <%= link_to "View All", account_transactions_path, class: "view-all-link" %>
+    </div>
+    
+    <div class="table-responsive">
+      <table class="dashboard-table">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>User</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_transactions.each do |transaction| %>
+            <tr>
+              <td><%= transaction.id %></td>
+              <td><%= transaction.user_card.profile.first_name %> <%= transaction.user_card.profile.last_name %></td>
+              <td class="amount">$<%= number_with_precision(transaction.amount, precision: 2) %></td>
+              <td><%= transaction.transaction_date.strftime("%Y-%m-%d") %></td>
+              <td><%= transaction.transaction_type.titleize %></td>
+              <td>
+                <span class="status-badge <%= transaction.amount.positive? ? 'completed' : 'pending' %>">
+                  <%= transaction.amount.positive? ? 'Completed' : 'Pending' %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  <div class="quick-links">
+    <h3>Quick Actions</h3>
+    <div class="links-container">
+      <%= link_to "Add New User", new_user_registration_path, class: "quick-link-card" %>
+      <%= link_to "Create Credit Card", new_credit_card_path, class: "quick-link-card" %>
+      <%= link_to "Record Transaction", new_account_transaction_path, class: "quick-link-card" %>
+      <%= link_to "Manage Branches", branches_path, class: "quick-link-card" %>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Charts -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    var txnCtx = document.getElementById('transactionChart').getContext('2d');
+    var txnChart = new Chart(txnCtx, {
+      type: 'line',
+      data: {
+        labels: <%= raw @monthly_transactions.keys.map { |d| Date.strptime(d, "%Y-%m").strftime("%b %Y") }.to_json %>,
+
+        datasets: [{
+          label: 'Transaction Count',
+          data: <%= raw @monthly_transactions.values.to_json %>,
+          backgroundColor: 'rgba(59, 130, 246, 0.2)',
+          borderColor: 'rgba(59, 130, 246, 1)',
+          borderWidth: 2,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    var distCtx = document.getElementById('cardDistributionChart').getContext('2d');
+    var cardTypes = <%= raw @card_distribution.keys.to_json %>;
+    var cardCounts = <%= raw @card_distribution.values.to_json %>;
+    
+    var distChart = new Chart(distCtx, {
+      type: 'doughnut',
+      data: {
+        labels: cardTypes,
+        datasets: [{
+          data: cardCounts,
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.8)',
+            'rgba(96, 165, 250, 0.8)',
+            'rgba(147, 197, 253, 0.8)',
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  });
+</script>
