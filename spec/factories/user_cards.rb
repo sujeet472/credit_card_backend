@@ -4,7 +4,7 @@ FactoryBot.define do
       # association :credit_card
       # association :profile
       association :credit_card, factory: :credit_card
-association :profile, factory: :profile
+      association :profile, factory: :profile
 
       issue_date { Date.today }
       expiry_date { Date.today + 5.years }

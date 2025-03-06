@@ -1,9 +1,4 @@
 
-
-
-
-
-
 FactoryBot.define do
     factory :credit_card do
       id { "CC#{rand(100..999)}" }

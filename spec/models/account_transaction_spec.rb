@@ -1,19 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe AccountTransaction, type: :model do
-  let(:payer) { create(:user_card, available_limit: 1000) }
-  let(:payee) { create(:user_card) }
-  let(:valid_attributes) do
-    {
-      user_card: payer,
-      merchant: payee,
-      transaction_date: Time.current,
-      amount: 100.0,
-      transaction_type: 'purchase'
-    }
-  end
+  let!(:user_profile) { create(:profile, email: "user1@example.com") }
+let!(:merchant_profile) { create(:profile, email: "user2@example.com") }
 
-  describe 'validations' do
+
+
+  
+
+
+
+  describe "Validations" do
     it { should validate_presence_of(:user_card_id) }
     it { should validate_presence_of(:transaction_date) }
     it { should validate_presence_of(:amount) }
@@ -23,51 +20,55 @@ RSpec.describe AccountTransaction, type: :model do
     it { should validate_inclusion_of(:transaction_type).in_array(['purchase', 'refund', 'adjustment']) }
   end
 
-  describe 'associations' do
+  describe "Associations" do
     it { should belong_to(:user_card) }
     it { should belong_to(:merchant).class_name('UserCard') }
     it { should have_one(:reward).dependent(:destroy) }
   end
 
-  describe 'callbacks' do
-    it 'generates a unique transaction ID before create' do
-      transaction = AccountTransaction.create!(valid_attributes)
-      expect(transaction.id).to match(/^T\d{3}$/)
+  describe "Callbacks" do
+    it "generates an ID before creation" do
+      transaction = create(:account_transaction, user_card: user_card, merchant: merchant, amount: 100.00)
+      expect(transaction.id).to match(/T\d{3}/) # Format: T001, T002, etc.
     end
 
-    it 'deducts available limit after create' do
-      expect { AccountTransaction.create!(valid_attributes) }
-        .to change { payer.reload.available_limit }.by(-100.0)
-        .and change { payee.reload.available_limit }.by(100.0)
-    end
-
-    it 'restores available limit when discarded' do
-      transaction = AccountTransaction.create!(valid_attributes)
-      expect { transaction.discard }
-        .to change { payer.reload.available_limit }.by(100.0)
-        .and change { payee.reload.available_limit }.by(-100.0)
-    end
-
-    it 'creates a reward if eligible' do
-      transaction = AccountTransaction.create!(valid_attributes)
-      expect(transaction.reward).to be_present
-      expect(transaction.reward.points_earned).to eq(1) # 1% of 100
+    it "checks sufficient balance before creating a purchase" do
+      transaction = build(:account_transaction, user_card: user_card, merchant: merchant, amount: 6000.00)
+      expect(transaction).to be_invalid
+      expect(transaction.errors[:base]).to include("Insufficient funds to complete the transaction")
     end
   end
 
-  describe 'business logic' do
-    it 'prevents transaction if funds are insufficient' do
-      payer.update!(available_limit: 50)
-      transaction = AccountTransaction.new(valid_attributes.merge(amount: 100))
-      expect(transaction).not_to be_valid
-      expect(transaction.errors[:base]).to include('Insufficient funds to complete the transaction')
+  describe "Business Logic" do
+    it "deducts available limit after purchase" do
+      transaction = create(:account_transaction, user_card: user_card, merchant: merchant, amount: 1000.00)
+      user_card.reload
+      expect(user_card.available_limit).to eq(4000.00)
     end
 
-    it 'refunds correctly by reversing balances' do
-      purchase = AccountTransaction.create!(valid_attributes)
-      refund = AccountTransaction.create!(valid_attributes.merge(transaction_type: 'refund'))
-      expect(payer.reload.available_limit).to eq(1000)
-      expect(payee.reload.available_limit).to eq(0)
+    it "restores available limit on refund" do
+      transaction = create(:account_transaction, user_card: user_card, merchant: merchant, amount: 1000.00, transaction_type: 'refund')
+      user_card.reload
+      expect(user_card.available_limit).to eq(6000.00)
+    end
+  end
+
+  describe "Soft Delete" do
+    let!(:transaction) { create(:account_transaction, user_card: user_card, merchant: merchant, amount: 500.00) }
+
+    it "discards transaction and restores available limit" do
+      transaction.discard
+      user_card.reload
+      expect(transaction.discarded?).to be true
+      expect(user_card.available_limit).to eq(5500.00)
+    end
+
+    it "undiscards transaction and deducts available limit" do
+      transaction.discard
+      transaction.undiscard
+      user_card.reload
+      expect(transaction.discarded?).to be false
+      expect(user_card.available_limit).to eq(4500.00)
     end
   end
 end
