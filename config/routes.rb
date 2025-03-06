@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get "profiles/index"
+  get "profiles/show"
+  get "profiles/new"
+  get "profiles/create"
+  get "profiles/edit"
+  get "profiles/update"
+  get "profiles/destroy"
   get "dashboard/index"
   get "profiles/index"
   get "profiles/edit"
@@ -55,6 +62,13 @@ Rails.application.routes.draw do
   resources :credit_cards 
   
   Rails.application.routes.draw do
+  get "profiles/index"
+  get "profiles/show"
+  get "profiles/new"
+  get "profiles/create"
+  get "profiles/edit"
+  get "profiles/update"
+  get "profiles/destroy"
   get "dashboard/index"
     namespace :api do
       namespace :v1 do
@@ -69,6 +83,13 @@ Rails.application.routes.draw do
   end
 
   Rails.application.routes.draw do
+  get "profiles/index"
+  get "profiles/show"
+  get "profiles/new"
+  get "profiles/create"
+  get "profiles/edit"
+  get "profiles/update"
+  get "profiles/destroy"
   get "dashboard/index"
     namespace :api do
       namespace :v1 do
@@ -83,6 +104,13 @@ Rails.application.routes.draw do
   end
 
   Rails.application.routes.draw do
+  get "profiles/index"
+  get "profiles/show"
+  get "profiles/new"
+  get "profiles/create"
+  get "profiles/edit"
+  get "profiles/update"
+  get "profiles/destroy"
   get "dashboard/index"
     namespace :api do
       namespace :v1 do
@@ -112,5 +140,6 @@ Rails.application.routes.draw do
 
     get 'dashboard', to: 'dashboard#index'
 
+    resources :profiles
 
 end

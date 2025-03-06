@@ -1,0 +1,9 @@
+<h1><%= @profile.first_name %> <%= @profile.last_name %></h1>
+<p><strong>Email:</strong> <%= @profile.email %></p>
+<p><strong>Phone:</strong> <%= @profile.phone_number %></p>
+<p><strong>Address:</strong> <%= @profile.address %></p>
+<p><strong>Account Type:</strong> <%= @profile.account_type %></p>
+<%= image_tag(@profile.profile_image, alt: "Profile Image") if @profile.profile_image.present? %>
+
+<%= link_to 'Edit', edit_profile_path(@profile) %> |
+<%= link_to 'Back to Profiles', profiles_path %>

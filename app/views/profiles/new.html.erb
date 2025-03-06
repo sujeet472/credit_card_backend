@@ -1,0 +1,52 @@
+<h1><%= @profile.new_record? ? "New Profile" : "Edit Profile" %></h1>
+
+<%= form_with(model: @profile, local: true) do |form| %>
+  <div>
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div>
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div>
+    <%= form.label :date_of_birth %>
+    <%= form.date_field :date_of_birth %>
+  </div>
+
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :phone_number %>
+    <%= form.number_field :phone_number %>
+  </div>
+
+  <div>
+    <%= form.label :address %>
+    <%= form.text_area :address %>
+  </div>
+
+  <div>
+    <%= form.label :branch_id %>
+    <%= form.text_field :branch_id %>
+  </div>
+
+  <div>
+    <%= form.label :profile_image %>
+    <%= form.text_field :profile_image %>
+  </div>
+
+  <div>
+    <%= form.label :account_type %>
+    <%= form.select :account_type, ["saving", "current", "salary"] %>
+  </div>
+
+  <%= form.submit %>
+<% end %>
+
+<%= link_to 'Back', profiles_path %>
