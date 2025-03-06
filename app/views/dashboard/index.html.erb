@@ -1,149 +1,390 @@
-<!-- Main Dashboard Container -->
+
+
 <div class="dashboard-container">
-  <!-- Header Stats Cards -->
-  <div class="stats-container">
-    <div class="stat-card">
-      <h3>Total Users</h3>
-      <div class="stat-value"><%= @total_profiles %></div>
+  <h1 class="dashboard-title">Admin Dashboard</h1>
+  
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="summary-card profiles-card">
+      <div class="card-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="card-content">
+        <h3>Total Profiles</h3>
+        <p class="card-value"><%= @total_profiles %></p>
+      </div>
     </div>
     
-    <div class="stat-card">
-      <h3>Active Cards</h3>
-      <div class="stat-value"><%= @active_cards %></div>
+    <div class="summary-card cards-card">
+      <div class="card-icon">
+        <i class="fas fa-credit-card"></i>
+      </div>
+      <div class="card-content">
+        <h3>Active Cards</h3>
+        <p class="card-value"><%= @active_cards %></p>
+      </div>
     </div>
     
-    <div class="stat-card">
-      <h3>Transactions (Total)</h3>
-      <div class="stat-value"><%= @total_transactions %></div>
+    <div class="summary-card transactions-card">
+      <div class="card-icon">
+        <i class="fas fa-exchange-alt"></i>
+      </div>
+      <div class="card-content">
+        <h3>Total Transactions</h3>
+        <p class="card-value"><%= @total_transactions %></p>
+      </div>
     </div>
     
-    <div class="stat-card">
-      <h3>Total Branches</h3>
-      <div class="stat-value"><%= @total_branches %></div>
+    <div class="summary-card branches-card">
+      <div class="card-icon">
+        <i class="fas fa-building"></i>
+      </div>
+      <div class="card-content">
+        <h3>Total Branches</h3>
+        <p class="card-value"><%= @total_branches %></p>
+      </div>
     </div>
   </div>
-
-  <!-- Charts Row -->
-  <div class="charts-row">
-    <!-- Transaction Volume Chart -->
-    <div class="chart-card large">
-      <h3>Transaction Volume</h3>
-      <canvas id="transactionChart"></canvas>
+  
+ 
+  <div class="dashboard-main">
+    
+    <div class="dashboard-column">
+     
+      <div class="chart-container">
+        <h2>Transaction Trend (Last 6 Months)</h2>
+        <canvas id="transactionTrendChart"></canvas>
+      </div>
+      
+      <!-- Credit Card Distribution -->
+      <div class="chart-container">
+        <h2>Credit Card Distribution</h2>
+        <canvas id="cardDistributionChart"></canvas>
+      </div>
     </div>
     
-    <!-- Card Type Distribution -->
-    <div class="chart-card small">
-      <h3>Card Types</h3>
-      <canvas id="cardDistributionChart"></canvas>
+    <!-- Right Column -->
+    <div class="dashboard-column">
+      <!-- Credit Utilization Gauge -->
+      <div class="chart-container">
+        <h2>Credit Utilization</h2>
+        <div class="gauge-container">
+          <canvas id="creditUtilizationGauge"></canvas>
+          <div class="gauge-value"><%= @credit_utilization %>%</div>
+        </div>
+      </div>
+      
+      <!-- New Profiles by Month -->
+      <div class="chart-container">
+        <h2>New Profiles by Month</h2>
+        <canvas id="newProfilesChart"></canvas>
+      </div>
     </div>
   </div>
-
+  
   <!-- Recent Transactions Table -->
-  <div class="table-card">
-    <div class="card-header">
-      <h3>Recent Transactions</h3>
-      <%= link_to "View All", account_transactions_path, class: "view-all-link" %>
-    </div>
-    
-    <div class="table-responsive">
-      <table class="dashboard-table">
-        <thead>
+  <div class="table-container">
+    <h2>Recent Transactions</h2>
+    <table class="transactions-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User</th>
+          <th>Amount</th>
+          <th>Transaction Type</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_transactions.each do |transaction| %>
           <tr>
-            <th>Transaction ID</th>
-            <th>User</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Status</th>
+            <td><%= transaction.transaction_date.strftime("%b %d, %Y") %></td>
+            <td><%= transaction.user_card.profile.first_name %> <%= transaction.user_card.profile.last_name %></td>
+            <td class="<%= transaction.amount > 0 ? 'positive-amount' : 'negative-amount' %>">
+              <%= number_to_currency(transaction.amount) %>
+            </td>
+            <td><%= transaction.transaction_type %></td>
+            <td><%= transaction.location %></td>
           </tr>
-        </thead>
-        <tbody>
-          <% @recent_transactions.each do |transaction| %>
-            <tr>
-              <td><%= transaction.id %></td>
-              <td><%= transaction.user_card.profile.first_name %> <%= transaction.user_card.profile.last_name %></td>
-              <td class="amount">$<%= number_with_precision(transaction.amount, precision: 2) %></td>
-              <td><%= transaction.transaction_date.strftime("%Y-%m-%d") %></td>
-              <td><%= transaction.transaction_type.titleize %></td>
-              <td>
-                <span class="status-badge <%= transaction.amount.positive? ? 'completed' : 'pending' %>">
-                  <%= transaction.amount.positive? ? 'Completed' : 'Pending' %>
-                </span>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-
-  <!-- Quick Links Section -->
-  <div class="quick-links">
-    <h3>Quick Actions</h3>
-    <div class="links-container">
-      <%= link_to "Add New User", new_user_registration_path, class: "quick-link-card" %>
-      <%= link_to "Create Credit Card", new_credit_card_path, class: "quick-link-card" %>
-      <%= link_to "Record Transaction", new_account_transaction_path, class: "quick-link-card" %>
-      <%= link_to "Manage Branches", branches_path, class: "quick-link-card" %>
-    </div>
+  
+  <!-- Top Merchants -->
+  <div class="chart-container">
+    <h2>Top Merchants</h2>
+    <canvas id="topMerchantsChart"></canvas>
   </div>
 </div>
 
 <!-- JavaScript for Charts -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    
-    var txnCtx = document.getElementById('transactionChart').getContext('2d');
-    var txnChart = new Chart(txnCtx, {
-      type: 'line',
-      data: {
-        labels: <%= raw @monthly_transactions.keys.map { |d| Date.strptime(d, "%Y-%m").strftime("%b %Y") }.to_json %>,
-
-        datasets: [{
-          label: 'Transaction Count',
-          data: <%= raw @monthly_transactions.values.to_json %>,
-          backgroundColor: 'rgba(59, 130, 246, 0.2)',
-          borderColor: 'rgba(59, 130, 246, 1)',
-          borderWidth: 2,
-          tension: 0.4
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-
-    var distCtx = document.getElementById('cardDistributionChart').getContext('2d');
-    var cardTypes = <%= raw @card_distribution.keys.to_json %>;
-    var cardCounts = <%= raw @card_distribution.values.to_json %>;
-    
-    var distChart = new Chart(distCtx, {
-      type: 'doughnut',
-      data: {
-        labels: cardTypes,
-        datasets: [{
-          data: cardCounts,
-          backgroundColor: [
-            'rgba(59, 130, 246, 0.8)',
-            'rgba(96, 165, 250, 0.8)',
-            'rgba(147, 197, 253, 0.8)',
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+  // Set custom colors
+  const colorPalette = {
+    primary: ['#3498db', '#2980b9', '#1a5276', '#154360', '#0e2f44'],
+    secondary: ['#2ecc71', '#27ae60', '#1d8348', '#145a32', '#0b331c'],
+    accent: ['#e74c3c', '#c0392b', '#922b21', '#641e16', '#3d1210'],
+    neutral: ['#9b59b6', '#8e44ad', '#6c3483', '#4a235a', '#2c1434'],
+    chart: [
+      '#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f39c12', 
+      '#1abc9c', '#d35400', '#c0392b', '#16a085', '#8e44ad'
+    ]
+  };
+  
+  // Transaction Trend Chart
+  const transactionTrendCtx = document.getElementById('transactionTrendChart').getContext('2d');
+  
+  // Convert Ruby hash to JavaScript arrays
+  const months = <%= raw @monthly_transactions.keys.to_json %>;
+  const transactionCounts = <%= raw @monthly_transactions.values.to_json %>;
+  const transactionAmounts = <%= raw @monthly_transaction_amounts.values.to_json %>;
+  
+  // Format months for display
+  const formattedMonths = months.map(month => {
+    const date = new Date(month + '-01');
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   });
+  
+  new Chart(transactionTrendCtx, {
+    type: 'line',
+    data: {
+      labels: formattedMonths,
+      datasets: [
+        {
+          label: 'Transaction Count',
+          data: transactionCounts,
+          borderColor: colorPalette.primary[0],
+          backgroundColor: 'rgba(52, 152, 219, 0.1)',
+          borderWidth: 2,
+          pointBackgroundColor: colorPalette.primary[1],
+          tension: 0.4,
+          yAxisID: 'y'
+        },
+        {
+          label: 'Transaction Amount ($)',
+          data: transactionAmounts,
+          borderColor: colorPalette.secondary[0],
+          backgroundColor: 'rgba(46, 204, 113, 0.1)',
+          borderWidth: 2,
+          pointBackgroundColor: colorPalette.secondary[1],
+          tension: 0.4,
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          title: {
+            display: true,
+            text: 'Transaction Count'
+          }
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          grid: {
+            drawOnChartArea: false,
+          },
+          title: {
+            display: true,
+            text: 'Amount ($)'
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.datasetIndex === 1) {
+                label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.raw);
+              } else {
+                label += context.raw;
+              }
+              return label;
+            }
+          }
+        }
+      }
+    }
+  });
+  
+  // Card Distribution Chart
+  const cardDistributionCtx = document.getElementById('cardDistributionChart').getContext('2d');
+  
+  // Convert Ruby hash to JavaScript arrays
+  const cardTypes = <%= raw @card_distribution.keys.to_json %>;
+  const cardCounts = <%= raw @card_distribution.values.to_json %>;
+  
+  new Chart(cardDistributionCtx, {
+    type: 'doughnut',
+    data: {
+      labels: cardTypes,
+      datasets: [{
+        data: cardCounts,
+        backgroundColor: colorPalette.chart.slice(0, cardTypes.length),
+        borderColor: 'rgba(255, 255, 255, 0.8)',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'right',
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.raw;
+              const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+              const percentage = Math.round((value / total) * 100);
+              return `${label}: ${value} (${percentage}%)`;
+            }
+          }
+        }
+      },
+      cutout: '60%',
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  });
+  
+ 
+  const creditUtilizationCtx = document.getElementById('creditUtilizationGauge').getContext('2d');
+  
+  const utilizationValue = <%= @credit_utilization %>;
+  
+ 
+  let gaugeColor;
+
+  if (utilizationValue < 30) {
+    gaugeColor = colorPalette.secondary[0]; // Green for low utilization
+  } else if (utilizationValue < 70) {
+    gaugeColor = '#f39c12'; 
+  } else {
+    gaugeColor = colorPalette.accent[0]; // Red for high utilization
+  }
+  
+  new Chart(creditUtilizationCtx, {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [utilizationValue, 100 - utilizationValue],
+        backgroundColor: [gaugeColor, '#ecf0f1'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      circumference: 180,
+      rotation: 270,
+      cutout: '80%',
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          enabled: false
+        }
+      }
+    }
+  });
+  
+  
+  const newProfilesCtx = document.getElementById('newProfilesChart').getContext('2d');
+  
+
+  const profileMonths = <%= raw @new_profiles_by_month.keys.to_json %>;
+  const profileCounts = <%= raw @new_profiles_by_month.values.to_json %>;
+
+  const formattedProfileMonths = profileMonths.map(month => {
+    const date = new Date(month + '-01');
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  });
+  
+  new Chart(newProfilesCtx, {
+    type: 'bar',
+    data: {
+      labels: formattedProfileMonths,
+      datasets: [{
+        label: 'New Profiles',
+        data: profileCounts,
+        backgroundColor: colorPalette.neutral[0],
+        borderColor: colorPalette.neutral[1],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Number of New Profiles'
+          }
+        }
+      }
+    }
+  });
+  
+  // Top Merchants Chart
+  const topMerchantsCtx = document.getElementById('topMerchantsChart').getContext('2d');
+
+  // Convert Ruby ActiveRecord relation to JavaScript arrays
+  const merchantIds = <%= raw @top_merchants.map(&:merchant_id).to_json %>;
+  const merchantCounts = <%= raw @top_merchants.map(&:transaction_count).to_json %>;
+
+
+  new Chart(topMerchantsCtx, {
+    type: 'horizontalBar',
+    data: {
+      labels: merchantIds,
+      datasets: [{
+        label: 'Transaction Count',
+        data: merchantCounts,
+        backgroundColor: colorPalette.chart.slice(0, 5),
+        borderColor: 'rgba(255, 255, 255, 0.6)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Number of Transactions'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+});
 </script>

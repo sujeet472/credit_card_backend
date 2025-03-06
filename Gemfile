@@ -86,3 +86,4 @@ gem 'byebug'
 gem 'simplecov', require: false, group: :test
 gem "factory_bot", "~> 6.5"
 gem 'faker'
+gem 'sassc-rails'
