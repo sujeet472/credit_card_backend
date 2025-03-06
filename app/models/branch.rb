@@ -6,8 +6,9 @@ class Branch < ApplicationRecord
     validates :branch_name, presence: true, length: { maximum: 50 }
     validates :branch_address, presence: true
     validates :branch_manager, presence: true, length: { maximum: 50 }
-    validates :branch_phone, presence: true, uniqueness: true, length: { maximum: 15 }
-    validates :branch_email, presence: true, uniqueness: true, length: { maximum: 100 }, format: { with: URI::MailTo::EMAIL_REGEXP }
+    # validates :branch_phone, presence: true, uniqueness: true, length: { maximum: 15 }
+    validates :branch_phone,presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 15 }
+    validates :branch_email, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 100 }, format: { with: URI::MailTo::EMAIL_REGEXP }
 
     before_discard do
       profiles.discard_all

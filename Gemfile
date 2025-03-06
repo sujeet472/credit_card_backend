@@ -51,12 +51,21 @@ group :development do
 
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
   gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
+
+  gem 'rspec-rails'
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'rspec-rails'
+  gem 'shoulda-matchers', '~> 6.0'
+
+  gem 'factory_bot_rails'
+  gem 'database_cleaner-active_record'
+  
+  
 end
 
 gem 'bcrypt', '~> 3.1.7'
@@ -73,3 +82,7 @@ gem 'jwt'
 gem 'rack-cors'
 
 gem 'byebug'
+
+gem 'simplecov', require: false, group: :test
+gem "factory_bot", "~> 6.5"
+gem 'faker'

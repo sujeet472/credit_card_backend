@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_27_073049) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_06_090516) do
   create_table "account_transactions", id: { type: :string, limit: 20 }, force: :cascade do |t|
     t.string "user_card_id", limit: 20, null: false
     t.datetime "transaction_date", null: false
@@ -109,6 +109,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_073049) do
     t.string "unconfirmed_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -122,4 +123,4 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_27_073049) do
   add_foreign_key "rewards", "user_cards"
   add_foreign_key "user_cards", "credit_cards"
   add_foreign_key "user_cards", "profiles"
-end 
+end
