@@ -65,6 +65,14 @@
     
     <!-- Right Column -->
     <div class="dashboard-column">
+
+    <!-- New Profiles by Month -->
+      <div class="chart-container">
+        <h2>New Profiles by Month</h2>
+        <canvas id="newProfilesChart"></canvas>
+      </div>
+
+      
       <!-- Credit Utilization Gauge -->
       <div class="chart-container">
         <h2>Credit Utilization</h2>
@@ -74,11 +82,7 @@
         </div>
       </div>
       
-      <!-- New Profiles by Month -->
-      <div class="chart-container">
-        <h2>New Profiles by Month</h2>
-        <canvas id="newProfilesChart"></canvas>
-      </div>
+      
     </div>
   </div>
   
@@ -111,17 +115,13 @@
     </table>
   </div>
   
-  <!-- Top Merchants -->
-  <div class="chart-container">
-    <h2>Top Merchants</h2>
-    <canvas id="topMerchantsChart"></canvas>
-  </div>
+  
 </div>
 
 <!-- JavaScript for Charts -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Set custom colors
+  
   const colorPalette = {
     primary: ['#3498db', '#2980b9', '#1a5276', '#154360', '#0e2f44'],
     secondary: ['#2ecc71', '#27ae60', '#1d8348', '#145a32', '#0b331c'],
@@ -133,10 +133,10 @@ document.addEventListener('DOMContentLoaded', function() {
     ]
   };
   
-  // Transaction Trend Chart
+ 
   const transactionTrendCtx = document.getElementById('transactionTrendChart').getContext('2d');
   
-  // Convert Ruby hash to JavaScript arrays
+ 
   const months = <%= raw @monthly_transactions.keys.to_json %>;
   const transactionCounts = <%= raw @monthly_transactions.values.to_json %>;
   const transactionAmounts = <%= raw @monthly_transaction_amounts.values.to_json %>;
@@ -224,10 +224,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Card Distribution Chart
+ 
   const cardDistributionCtx = document.getElementById('cardDistributionChart').getContext('2d');
   
-  // Convert Ruby hash to JavaScript arrays
+ 
   const cardTypes = <%= raw @card_distribution.keys.to_json %>;
   const cardCounts = <%= raw @card_distribution.values.to_json %>;
   
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
       },
-      cutout: '60%',
+      cutout: '40%',
       animation: {
         animateScale: true,
         animateRotate: true
@@ -347,10 +347,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Top Merchants Chart
   const topMerchantsCtx = document.getElementById('topMerchantsChart').getContext('2d');
 
-  // Convert Ruby ActiveRecord relation to JavaScript arrays
   const merchantIds = <%= raw @top_merchants.map(&:merchant_id).to_json %>;
   const merchantCounts = <%= raw @top_merchants.map(&:transaction_count).to_json %>;
 

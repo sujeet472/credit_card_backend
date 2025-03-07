@@ -47,8 +47,8 @@ class AccountTransaction < ApplicationRecord
   end
 
   def update_available_limit
-    payer = UserCard.kept.find_by(id: user_card_id) # The person making the transaction
-    payee = UserCard.kept.find_by(id: merchant_id) # The recipient of the transaction
+    payer = UserCard.kept.find_by(id: user_card_id) 
+    payee = UserCard.kept.find_by(id: merchant_id) # The recipient 
     
     return unless payer && payee
   
@@ -87,10 +87,10 @@ class AccountTransaction < ApplicationRecord
     return unless user_card
 
     if transaction_type == 'refund'
-      # If refund is discarded, decrease available limit
+      # If refund is then decrease available limit
       user_card.update!(available_limit: user_card.available_limit - amount)
     else
-      # If purchase/adjustment is discarded, increase available limit
+      # If purchase or adjustment is discarded, increase available limit
       user_card.update!(available_limit: user_card.available_limit + amount)
     end
   rescue StandardError => e
