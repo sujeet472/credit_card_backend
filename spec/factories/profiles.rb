@@ -1,13 +1,13 @@
 FactoryBot.define do
     factory :profile do
-      first_name { "John" }
-      last_name { "Doe" }
+      first_name { "sujeet" }
+      last_name { "gupta" }
       date_of_birth { "1990-01-01" }
     #   email { "john1@example.com" }
     email { Faker::Internet.unique.email }
     # sequence(:email) { |n| "john#{n}.example.com" }
       phone_number { "1234567890" }
-      address { "123 Main Street, City" }
+      address { "123 balewadi, City" }
       profile_image { "profile.jpg" }
       account_type { "saving" }
       
@@ -15,7 +15,7 @@ FactoryBot.define do
       association :user
       
       after(:build) do |profile|
-        profile.id ||= "P#{rand(100..999)}" # Assign a formatted ID
+        profile.id ||= "P#{rand(100..999)}"
       end
     end
   end

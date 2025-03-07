@@ -57,9 +57,11 @@
   </nav>
   
   <div class="sidebar-footer">
-    <%= link_to destroy_user_session_path, method: :delete, class: "logout-link" do %>
+    <%= link_to destroy_user_session_path,data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } , class: "logout-link" do %>
       <i class="sidebar-icon">🚪</i>
       <span>Logout</span>
     <% end %>
+
+    
   </div>
 </div>
