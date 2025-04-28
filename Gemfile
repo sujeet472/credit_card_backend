@@ -60,7 +60,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem 'rspec-rails'
-  gem 'shoulda-matchers', '~> 6.0'
+  gem 'shoulda-matchers', '~> 6.5'
 
   gem 'factory_bot_rails'
   gem 'database_cleaner-active_record'
