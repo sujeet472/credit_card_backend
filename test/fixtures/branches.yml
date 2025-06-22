@@ -1,15 +1,28 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  branch_name: MyString
-  branch_address: MyText
-  branch_manager: MyString
-  branch_phone: MyString
-  branch_email: MyString
 
-two:
-  branch_name: MyString
-  branch_address: MyText
-  branch_manager: MyString
-  branch_phone: MyString
-  branch_email: MyString
+one:
+  id: B001
+  branch_name: Main Branch
+  branch_address: 123 Main Street
+  branch_manager: John Doe
+  branch_phone: 1234567890
+  branch_email: main@example.com
+
+# one:
+#   branch_name: MyString
+#   branch_address: MyText
+#   branch_manager: MyString
+#   branch_phone: MyString
+#   branch_email: MyString
+#   branch_phone: 1234567890
+#   branch_email: my_email2
+
+# two:
+#   branch_name: MyString
+#   branch_address: MyText
+#   branch_manager: MyString
+#   branch_phone: MyString
+#   branch_email: MyString
+#   branch_phone: 0987654321
+#   branch_email: myemail

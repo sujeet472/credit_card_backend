@@ -39,6 +39,6 @@ class Api::V1::UserCardsController < Api::V1::BaseController
     end
   
     def card_params
-      params.require(:user_card).permit(:credit_card_id, :customer_id, :issue_date, :expiry_date, :cvv, :is_active, :available_limit)
+      params.require(:user_card).permit(:credit_card_id, :profile_id, :issue_date, :expiry_date, :cvv, :is_active, :available_limit)
     end
 end

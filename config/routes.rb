@@ -1,46 +1,45 @@
 Rails.application.routes.draw do
-  get "profiles/index"
-  get "profiles/show"
-  get "profiles/new"
-  get "profiles/create"
-  get "profiles/edit"
-  get "profiles/update"
-  get "profiles/destroy"
-  get "dashboard/index"
-  get "profiles/index"
-  get "profiles/edit"
-  get "profiles/update"
-  get "credit_cards/index"
-  get "home/index"
+  # Devise
   devise_for :users
 
-  # resources :users
+  # Custom authentication
   post '/auth/login', to: 'authentication#login'
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Public routes
+  get 'home/index'
+  get 'dashboard/index'
+  get 'dashboard', to: 'dashboard#index'
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  # Profiles
+  resources :profiles do
+    collection do
+      get :index
+      get :show
+      get :new
+      get :create
+      get :edit
+      get :update
+      get :destroy
+    end
+  end
 
-  # Render dynamic PWA files from app/views/pwa/*
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  # Credit cards
+  resources :credit_cards do
+    collection do
+      get :index
+    end
+  end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Root route
+  root to: "branches#index"
 
-  # root to: "home#index"
-  # resources :branches
-  root to: "branches#index" 
-
+  # Soft-deletable resources
   resources :branches do
     member do
       patch :restore
     end
   end
 
-  
   resources :account_transactions do
     member do
       patch :undiscard
@@ -59,87 +58,32 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :credit_cards 
-  
-  Rails.application.routes.draw do
-  get "profiles/index"
-  get "profiles/show"
-  get "profiles/new"
-  get "profiles/create"
-  get "profiles/edit"
-  get "profiles/update"
-  get "profiles/destroy"
-  get "dashboard/index"
-    namespace :api do
-      namespace :v1 do
-        resources :credit_cards do
-         member do
+  # API Namespaces
+  namespace :api do
+    namespace :v1 do
+      resources :credit_cards do
+        member do
           patch :restore
           patch :discard
-         end
         end
-      end 
-    end
-  end
-
-  Rails.application.routes.draw do
-  get "profiles/index"
-  get "profiles/show"
-  get "profiles/new"
-  get "profiles/create"
-  get "profiles/edit"
-  get "profiles/update"
-  get "profiles/destroy"
-  get "dashboard/index"
-    namespace :api do
-      namespace :v1 do
-        resources :customers, params: :customer_id
-        resources :credit_cards, params: :credit_card_id
-        resources :account_transactions, params: :transaction_id
-        resources :branches, params: :branch_id
-        resources :rewards, params: :reward_id
-        resources :user_cards, params: :user_card_id
       end
-    end
-  end
 
-  Rails.application.routes.draw do
-  get "profiles/index"
-  get "profiles/show"
-  get "profiles/new"
-  get "profiles/create"
-  get "profiles/edit"
-  get "profiles/update"
-  get "profiles/destroy"
-  get "dashboard/index"
-    namespace :api do
-      namespace :v1 do
-        post 'auth/login', to: 'auth#create'
-      end
-    end
-  end
+      resources :profiles, params: :profile_id
+      resources :account_transactions, params: :transaction_id
+      resources :branches, params: :branch_id
+      resources :rewards, params: :reward_id
+      resources :user_cards, params: :user_card_id
 
-  namespace :api do
-    namespace :v1 do
+      post 'auth/login', to: 'auth#create'
+
       resources :frontend_user_cards, only: [:index]
-    end
-  end
-
-  namespace :api do
-    namespace :v1 do
       resources :frontend_account_transactions, only: [:index, :create]
+      resource :frontend_profile, only: [:show, :update]
     end
   end
 
-    namespace :api do
-      namespace :v1 do
-        resource :frontend_profile, only: [:show, :update]
-      end
-    end
-  
-
-    get 'dashboard', to: 'dashboard#index'
-
-    resources :profiles
-
+  # Health & PWA
+  get "up" => "rails/health#show", as: :rails_health_check
+  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 end

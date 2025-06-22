@@ -1,17 +1,10 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  user_card_id: MyString
-  merchant_id: MyString
-  location: MyString
-  transaction_type: MyString
-  created_at: 2025-02-06 16:31:43
-  updated_at: 2025-02-06 16:31:43
+  id: AT001
+  user_card_id: UC001
+  transaction_date: 2025-06-01 10:00:00
+  amount: 500.00
+  merchant_id: UC001
+  location: "Online Store"
+  transaction_type: purchase
 
-two:
-  user_card_id: MyString
-  merchant_id: MyString
-  location: MyString
-  transaction_type: MyString
-  created_at: 2025-02-06 16:31:43
-  updated_at: 2025-02-06 16:31:43
